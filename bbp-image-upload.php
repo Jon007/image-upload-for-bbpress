@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Image Upload for BBPress
  * Description: Upload inline images to BBPress forum topics and replies.
- * Version: 1.0
+ * Version: 1.0.1
  * Author: Hearken Media
  * Author URI: http://hearkenmedia.com/landing-wp-plugin.php?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-widget-link
  * License: GNU General Public License version 2 or later
