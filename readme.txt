@@ -13,6 +13,16 @@ Upload inline images to BBPress forum topics and replies.
 
 This plugin enables the TinyMCE WYSIWYG editor for BBPress forum topics and replies and adds a button to the editor's "Insert/edit image" dialog that allows forum users to upload images from their computer and insert them inline into their posts.
 
+A [pro version](http://potentplugins.com/downloads/image-upload-for-bbpress-pro-wordpress-plugin/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-repo-upgrade-link) with the following additional features is also available:
+
+* Change the directory where uploaded images are stored.
+* Limit which user roles are permitted to upload images.
+* Limit the number of uploaded images allowed per post.
+* Automatically downsize images to fit specified maximum dimensions.
+* Convert all uploaded images to the same image format, if desired.
+* Set PNG and JPEG compression levels so images take up less disk space.
+* View total image count and file size statistics.
+
 == Installation ==
 
 1. Click "Plugins" > "Add New" in the WordPress admin menu.
