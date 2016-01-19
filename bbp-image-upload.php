@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Image Upload for BBPress
  * Description: Upload inline images to BBPress forum topics and replies.
- * Version: 1.0.1
- * Author: Hearken Media
- * Author URI: http://hearkenmedia.com/landing-wp-plugin.php?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-widget-link
+ * Version: 1.0.2
+ * Author: Potent Plugins
+ * Author URI: http://potentplugins.com/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-credit-link
  * License: GNU General Public License version 2 or later
  * License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
  */
@@ -12,20 +12,37 @@
 
 add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'hm_bbpui_action_links');
 function hm_bbpui_action_links($links) {
-	$links[] = '<a href="'.esc_url(get_admin_url(null, 'index.php?page=hm_bbpui_about')).'">About</a>';
+	array_unshift($links, '<a href="'.esc_url(get_admin_url(null, 'options-general.php?page=hm_bbpui')).'">About</a>');
 	return $links;
 }
 
 add_action('admin_menu', 'hm_bbpui_admin_menu');
 function hm_bbpui_admin_menu() {
-	add_dashboard_page('Image Upload for BBPress', '', 'activate_plugins', 'hm_bbpui_about', 'hm_bbpui_about_page');
+	add_options_page('Image Upload for BBPress', 'Forum Images', 'activate_plugins', 'hm_bbpui', 'hm_bbpui_admin_page');
 }
 
-function hm_bbpui_about_page() {
+function hm_bbpui_admin_page() {
 	echo('
 		<div class="wrap">
 			<h2>Image Upload for BBPress</h2>
-			<h3>Usage Instructions</h3>
+			
+	');
+	echo('<div style="background-color: #fff; border: 1px solid #ccc; padding: 20px; max-width: 800px;">
+		<h3 style="margin: 0;">Upgrade to <a href="http://potentplugins.com/downloads/image-upload-for-bbpress-pro-wordpress-plugin/?utm_source=image-upload-for-bbpress&amp;utm_medium=link&amp;utm_campaign=wp-plugin-upgrade-link" target="_blank">Image Upload for BBPress Pro</a> for advanced configuration options!</h3>
+		<ul>
+<li>Change the directory where uploaded images are stored.</li>
+<li>Limit which user roles are permitted to upload images.</li>
+<li>Limit the number of uploaded images allowed per post.</li>
+<li>Automatically downsize images to fit specified maximum dimensions.</li>
+<li>Convert all uploaded images to the same image format, if desired.</li>
+<li>Set PNG and JPEG compression levels so images take up less disk space.</li>
+<li>View total image count and file size statistics.</li>
+		</ul>
+		<strong>Receive a 25% discount with the coupon code <span style="color: #f00;">BBPIMAGES25</span>!</strong>
+		<a href="http://potentplugins.com/downloads/image-upload-for-bbpress-pro-wordpress-plugin/?utm_source=image-upload-for-bbpress&amp;utm_medium=link&amp;utm_campaign=wp-plugin-upgrade-link" target="_blank">Buy Now &gt;</a>
+	</div>');
+	echo('
+			<h3 style="margin-top: 40px;">Usage Instructions</h3>
 			<p>To upload an image to a forum topic or reply, click the <em>Insert/edit image</em> button in the editor toolbar:</p>
 			<img src="'.plugins_url('images/bbpui-screenshot-toolbar.png', __FILE__).'" alt="Toolbar screenshot" />
 			<p>Then click the Browse button in the image dialog to select and upload an image:</p>
@@ -36,11 +53,11 @@ function hm_bbpui_about_page() {
 				<li><strong>upload_max_filesize:</strong> '.ini_get('upload_max_filesize').'</li>
 				<li><strong>post_max_size:</strong> '.ini_get('post_max_size').'</li>
 			</ul>
-			<h3 style="margin-top: 40px;">Plugin Created By:</h3>
-			<a href="http://hearkenmedia.com/landing-wp-plugin.php?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-widget-link" target="_blank"><img src="'.plugins_url('images/hm-logo.png', __FILE__).'" alt="Hearken Media" style="width: 250px;" /></a><br />
-			<a href="https://wordpress.org/support/view/plugin-reviews/image-upload-for-bbpress" target="_blank"><strong>
-				If you find this plugin useful, please write a brief review!
-			</strong></a>
+			<div style="margin-top: 40px;"></div>
+	');
+	$potent_slug = 'image-upload-for-bbpress';
+	include(__DIR__.'/plugin-credit.php');
+	echo('
 		</div>
 	');
 }
