@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Image Upload for BBPress
  * Description: Upload inline images to BBPress forum topics and replies.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Potent Plugins
- * Author URI: http://potentplugins.com/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-credit-link
+ * Author URI: http://potentplugins.com/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-author-uri
  * License: GNU General Public License version 2 or later
  * License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
  */
@@ -201,5 +201,36 @@ function hm_bbpui_deactivate() {
 	// Unschedule temp dir cleaning
 	wp_clear_scheduled_hook('hm_bbpui_clean_temp_dir');
 }
+
+
+/* Review/donate notice */
+
+register_activation_hook(__FILE__, 'hm_bbpui_first_activate');
+function hm_bbpui_first_activate() {
+	$pre = 'hm_bbpui';
+	$firstActivate = get_option($pre.'_first_activate');
+	if (empty($firstActivate)) {
+		update_option($pre.'_first_activate', time());
+	}
+}
+if (is_admin() && get_option('hm_bbpui_rd_notice_hidden') != 1 && time() - get_option('hm_bbpui_first_activate') >= (14*3600)) {
+	add_action('admin_notices', 'hm_bbpui_rd_notice');
+	add_action('wp_ajax_hm_bbpui_rd_notice_hide', 'hm_bbpui_rd_notice_hide');
+}
+function hm_bbpui_rd_notice() {
+	$pre = 'hm_bbpui';
+	$slug = 'image-upload-for-bbpress';
+	echo('
+		<div id="'.$pre.'_rd_notice" class="updated notice is-dismissible"><p>Do you use the <strong>Image Upload for BBPress</strong> plugin?
+		Please support our free plugin by <a href="https://wordpress.org/support/view/plugin-reviews/'.$slug.'" target="_blank">writing a review</a> and/or <a href="https://potentplugins.com/donate/?utm_source='.$slug.'&amp;utm_medium=link&amp;utm_campaign=wp-plugin-notice-donate-link" target="_blank">making a donation</a>!
+		Thanks!</p></div>
+		<script>jQuery(document).ready(function($){$(\'#'.$pre.'_rd_notice\').on(\'click\', \'.notice-dismiss\', function(){jQuery.post(ajaxurl, {action:\'hm_bbpui_rd_notice_hide\'})});});</script>
+	');
+}
+function hm_bbpui_rd_notice_hide() {
+	$pre = 'hm_bbpui';
+	update_option($pre.'_rd_notice_hidden', 1);
+}
+
 
 ?>

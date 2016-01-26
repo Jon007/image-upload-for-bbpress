@@ -1,9 +1,10 @@
 === Image Upload for BBPress ===
 Contributors: hearken
+Donate link: https://potentplugins.com/donate/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-readme-donate-link
 Tags: bbpress, image, images, media
 Requires at least: 3.5
 Tested up to: 4.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
