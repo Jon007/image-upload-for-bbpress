@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Image Upload for BBPress
  * Description: Upload inline images to BBPress forum topics and replies.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: Potent Plugins
  * Author URI: http://potentplugins.com/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-author-uri
  * License: GNU General Public License version 2 or later
@@ -76,7 +76,10 @@ function hm_bbpui_handle_upload() {
 		return;
 	
 	// Check capabilities
-	if (!(current_user_can('publish_topics') || current_user_can('publish_replies')))
+	if (!(
+			current_user_can('publish_topics') || current_user_can('publish_replies')
+			|| (!is_user_logged_in() && get_option('_bbp_allow_anonymous', false))
+		))
 		hm_bbpui_upload_error();
 	
 	// Check file upload
@@ -110,6 +113,7 @@ function hm_bbpui_handle_upload() {
 		case 'image/png':
 			$img = imagecreatefrompng($_FILES['hm_bbpui_file']['tmp_name']) or hm_bbpui_upload_error();
 			imagesavealpha($img, true) or hm_bbpui_upload_error();
+			imagealphablending($img, false) or hm_bbpui_upload_error();
 			imagepng($img, $tempUploadDir.'/'.$tempName) or hm_bbpui_upload_error();
 			break;
 		case 'image/gif':
@@ -213,7 +217,7 @@ function hm_bbpui_first_activate() {
 		update_option($pre.'_first_activate', time());
 	}
 }
-if (is_admin() && get_option('hm_bbpui_rd_notice_hidden') != 1 && time() - get_option('hm_bbpui_first_activate') >= (14*3600)) {
+if (is_admin() && get_option('hm_bbpui_rd_notice_hidden') != 1 && time() - get_option('hm_bbpui_first_activate') >= (14*86400)) {
 	add_action('admin_notices', 'hm_bbpui_rd_notice');
 	add_action('wp_ajax_hm_bbpui_rd_notice_hide', 'hm_bbpui_rd_notice_hide');
 }
