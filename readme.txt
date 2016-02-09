@@ -4,7 +4,7 @@ Donate link: https://potentplugins.com/donate/?utm_source=image-upload-for-bbpre
 Tags: bbpress, image, images, media
 Requires at least: 3.5
 Tested up to: 4.4
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
