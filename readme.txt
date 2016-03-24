@@ -3,7 +3,7 @@ Contributors: hearken
 Donate link: https://potentplugins.com/donate/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-readme-donate-link
 Tags: bbpress, image, images, media
 Requires at least: 3.5
-Tested up to: 4.4
+Tested up to: 4.5
 Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -47,7 +47,6 @@ Alternatively, you can manually upload the plugin to your wp-content/plugins dir
 * Added cleanup feature to remove unnecessary files
 * Added plain text conversion when pasting formatted text into the WYSIWYG editor
 * Added attempt to increase PHP memory limit before image processing
-
 
 = 1.0.8 =
 * Fixed bug affecting multi-domain sites
