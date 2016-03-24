@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Image Upload for BBPress
  * Description: Upload inline images to BBPress forum topics and replies.
- * Version: 1.0.8
+ * Version: 1.1.0
  * Author: Potent Plugins
  * Author URI: http://potentplugins.com/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-author-uri
  * License: GNU General Public License version 2 or later
@@ -22,6 +22,10 @@ function hm_bbpui_admin_menu() {
 }
 
 function hm_bbpui_admin_page() {
+	
+	if (!empty($_POST['cleanup']))
+		hm_bbpui_cleanup();
+	
 	echo('
 		<div class="wrap">
 			<h2>Image Upload for BBPress</h2>
@@ -53,6 +57,10 @@ function hm_bbpui_admin_page() {
 				<li><strong>upload_max_filesize:</strong> '.ini_get('upload_max_filesize').'</li>
 				<li><strong>post_max_size:</strong> '.ini_get('post_max_size').'</li>
 			</ul>
+			<h3 style="margin-top: 40px;">Maintenance</h3>
+			<form action="" method="post">
+				<button type="submit" name="cleanup" value="1" class="button-primary" style="margin-right: 10px;">Cleanup Unnecessary Files</button>
+			</form>
 			<div style="margin-top: 40px;"></div>
 	');
 	$potent_slug = 'image-upload-for-bbpress';
@@ -65,9 +73,16 @@ function hm_bbpui_admin_page() {
 add_filter('bbp_after_get_the_content_parse_args', 'hm_bbpiu_modify_editor');
 function hm_bbpiu_modify_editor($args = array()) {
 	$args['tinymce'] = array(
-		'file_browser_callback' => 'function(field_id){hm_bbpui_file_upload(field_id);}'
+		'file_browser_callback' => 'function(field_id){hm_bbpui_file_upload(field_id);}',
+		'paste_as_text' => true
 	);
 	return $args;
+}
+
+add_filter('bbp_get_tiny_mce_plugins', 'hhm_bbpui_tinymce_plugins');
+function hhm_bbpui_tinymce_plugins($plugins = array()) {
+	$plugins[] = 'paste';
+	return $plugins;
 }
 
 add_action('init', 'hm_bbpui_handle_upload');
@@ -104,10 +119,14 @@ function hm_bbpui_handle_upload() {
 	if ($dotPos)
 		$tempName .= substr($_FILES['hm_bbpui_file']['name'], $dotPos);
 	
+	// Try to increase memory limit
+	@ini_set('memory_limit', '256M');
+	
 	// Save as an image file (for security reasons)
 	switch (strtolower($_FILES['hm_bbpui_file']['type'])) {
 		case 'image/jpeg':
 			$img = imagecreatefromjpeg($_FILES['hm_bbpui_file']['tmp_name']) or hm_bbpui_upload_error();
+			$img = bbpui_apply_exif_rotation($img, $_FILES['hm_bbpui_file']['tmp_name']) or hm_bbpui_upload_error();
 			imagejpeg($img, $tempUploadDir.'/'.$tempName) or hm_bbpui_upload_error();
 			break;
 		case 'image/png':
@@ -121,7 +140,7 @@ function hm_bbpui_handle_upload() {
 			imagegif($img, $tempUploadDir.'/'.$tempName) or hm_bbpui_upload_error();
 			break;
 		default:
-			($img = imagecreatefromjpeg($_FILES['hm_bbpui_file']['tmp_name']) && imagejpeg($img, $tempUploadDir.'/'.$tempName)) or
+			($img = imagecreatefromjpeg($_FILES['hm_bbpui_file']['tmp_name']) && bbpui_apply_exif_rotation($img, $_FILES['hm_bbpui_file']['tmp_name']) && imagejpeg($img, $tempUploadDir.'/'.$tempName)) or
 			($img = imagecreatefrompng($_FILES['hm_bbpui_file']['tmp_name']) && imagesavealpha($img, true) && imagepng($img, $tempUploadDir.'/'.$tempName)) or
 			($img = imagecreatefromgif($_FILES['hm_bbpui_file']['tmp_name'])  && imagegif($img, $tempUploadDir.'/'.$tempName)) or
 			hm_bbpui_upload_error();
@@ -136,6 +155,26 @@ function hm_bbpui_handle_upload() {
 function hm_bbpui_upload_error() {
 	echo('Error');
 	exit;
+}
+
+function bbpui_apply_exif_rotation($img, $sourceFile) {
+	if (function_exists('exif_read_data')) {
+		$exifData = @exif_read_data($sourceFile);
+		if (!empty($exifData['Orientation'])) {
+			switch ($exifData['Orientation']) {
+				case 8:
+					$img = imagerotate($img, 90, 0);
+					break;
+				case 3:
+					$img = imagerotate($img, 180, 0);
+					break;
+				case 6:
+					$img = imagerotate($img, 270, 0);
+					break;
+			}
+		}
+	}
+	return $img;
 }
 
 add_action('wp_enqueue_scripts', 'hm_bbpui_enqueue_scripts');
@@ -180,9 +219,9 @@ function hm_bbpui_delete_post($postId) {
 	if (is_dir($postUploadDir)) {
 		foreach (scandir($postUploadDir) as $dirItem) {
 			if (is_file($postUploadDir.'/'.$dirItem))
-				unlink($postUploadDir.'/'.$dirItem);
+				@unlink($postUploadDir.'/'.$dirItem);
 		}
-		rmdir($postUploadDir);
+		@rmdir($postUploadDir);
 	}
 }
 
@@ -192,8 +231,22 @@ function hm_bbpui_clean_temp_dir() {
 	foreach (scandir($uploadDir['basedir'].'/hm_bbpui_temp') as $dirItem) {
 		$dirItem = $uploadDir['basedir'].'/hm_bbpui_temp/'.$dirItem;
 		if (is_file($dirItem) && filemtime($dirItem) < $timeThreshold)
-			unlink($dirItem);
+			@unlink($dirItem);
 	}
+}
+
+function hm_bbpui_cleanup() {
+	// Delete directories for non-existent posts
+	$uploadDir = wp_upload_dir();
+	$storageDir = $uploadDir['basedir'].'/hm_bbpui';
+	foreach (scandir($storageDir) as $dirItem) {
+		if (is_numeric($dirItem) && is_dir($storageDir.'/'.$dirItem) && get_post_status($dirItem) === false) {
+			hm_bbpui_delete_post($dirItem);
+		}
+	}
+	
+	// Clean temp directory
+	hm_bbpui_clean_temp_dir();
 }
 
 register_activation_hook(__FILE__, 'hm_bbpui_activate');
@@ -207,7 +260,6 @@ function hm_bbpui_deactivate() {
 	// Unschedule temp dir cleaning
 	wp_clear_scheduled_hook('hm_bbpui_clean_temp_dir');
 }
-
 
 /* Review/donate notice */
 
