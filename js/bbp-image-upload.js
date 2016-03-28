@@ -26,3 +26,32 @@ function hm_bbpui_file_upload_submit() {
 	
 	return true;
 }
+
+// Override addReply.moveForm function to re-initialize TinyMCE
+var moveFormDefault, cancelReplyDefault;
+jQuery(document).ready(function() {
+	if (addReply && addReply.moveForm) {
+		moveFormDefault = addReply.moveForm;
+		addReply.moveForm = function(replyId, parentId, respondId, postId) {
+			var tA = jQuery('#' + respondId).find('textarea.wp-editor-area');
+			if (tA.length && tinymce && tinyMCEPreInit && tinyMCEPreInit.mceInit[tA.attr('id')]) {
+				tinymce.get(tA.attr('id')).destroy();
+				var result = moveFormDefault.apply(this, arguments);
+				tinymce.init(tinyMCEPreInit.mceInit[tA.attr('id')]);
+				
+				
+				jQuery('#bbp-cancel-reply-to-link').click(function() {
+					var tA = jQuery(this).closest('form').find('textarea.wp-editor-area');
+					if (tA.length && tinymce && tinyMCEPreInit && tinyMCEPreInit.mceInit[tA.attr('id')]) {
+						tinymce.get(tA.attr('id')).destroy();
+						tinymce.init(tinyMCEPreInit.mceInit[tA.attr('id')]);
+					}
+				});
+				
+				return result;
+			} else {
+				return moveFormDefault.apply(this, arguments);
+			}
+		}
+	}
+});

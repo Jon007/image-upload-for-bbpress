@@ -4,7 +4,7 @@ Donate link: https://potentplugins.com/donate/?utm_source=image-upload-for-bbpre
 Tags: bbpress, image, images, media
 Requires at least: 3.5
 Tested up to: 4.5
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ Alternatively, you can manually upload the plugin to your wp-content/plugins dir
 2. The Browse button in the Image dialog, which allows the user to select and upload an image from their computer for inline insertion into their forum topic or reply.
 
 == Changelog ==
+
+= 1.1.1 =
+* Fixed problem with reply threading in IE
 
 = 1.1.0 =
 * Added support for rotations based on EXIF orientation data in JPEG images
