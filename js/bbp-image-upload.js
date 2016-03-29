@@ -30,11 +30,12 @@ function hm_bbpui_file_upload_submit() {
 // Override addReply.moveForm function to re-initialize TinyMCE
 var moveFormDefault, cancelReplyDefault;
 jQuery(document).ready(function() {
-	if (addReply && addReply.moveForm) {
+	if (typeof addReply != 'undefined' && typeof addReply.moveForm != 'undefined') {
 		moveFormDefault = addReply.moveForm;
 		addReply.moveForm = function(replyId, parentId, respondId, postId) {
 			var tA = jQuery('#' + respondId).find('textarea.wp-editor-area');
-			if (tA.length && tinymce && tinyMCEPreInit && tinyMCEPreInit.mceInit[tA.attr('id')]) {
+			if (tA.length && typeof tinymce != 'undefined' && typeof tinyMCEPreInit != 'undefined'
+					&& typeof tinyMCEPreInit.mceInit[tA.attr('id')] != undefined) {
 				tinymce.get(tA.attr('id')).destroy();
 				var result = moveFormDefault.apply(this, arguments);
 				tinymce.init(tinyMCEPreInit.mceInit[tA.attr('id')]);
@@ -42,7 +43,8 @@ jQuery(document).ready(function() {
 				
 				jQuery('#bbp-cancel-reply-to-link').click(function() {
 					var tA = jQuery(this).closest('form').find('textarea.wp-editor-area');
-					if (tA.length && tinymce && tinyMCEPreInit && tinyMCEPreInit.mceInit[tA.attr('id')]) {
+					if (tA.length && typeof tinymce != 'undefined' && typeof tinyMCEPreInit != 'undefined'
+							&& typeof tinyMCEPreInit.mceInit[tA.attr('id')] != undefined) {
 						tinymce.get(tA.attr('id')).destroy();
 						tinymce.init(tinyMCEPreInit.mceInit[tA.attr('id')]);
 					}
