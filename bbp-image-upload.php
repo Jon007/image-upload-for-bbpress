@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Image Upload for BBPress
  * Description: Upload inline images to BBPress forum topics and replies.
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Potent Plugins
  * Author URI: http://potentplugins.com/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-author-uri
  * License: GNU General Public License version 2 or later
@@ -40,6 +40,7 @@ function hm_bbpui_admin_page() {
 <li>Automatically downsize images to fit specified maximum dimensions.</li>
 <li>Convert all uploaded images to the same image format, if desired.</li>
 <li>Set PNG and JPEG compression levels so images take up less disk space.</li>
+<li>Allow users to view enlarged images in a <strong>lightbox</strong> by clicking on them within the post.</li>
 <li>View total image count and file size statistics.</li>
 		</ul>
 		<strong>Receive a 25% discount with the coupon code <span style="color: #f00;">BBPIMAGES25</span>!</strong>
@@ -179,8 +180,10 @@ function bbpui_apply_exif_rotation($img, $sourceFile) {
 
 add_action('wp_enqueue_scripts', 'hm_bbpui_enqueue_scripts');
 function hm_bbpui_enqueue_scripts() {
-	wp_enqueue_script('hm_bbpui', plugins_url('js/bbp-image-upload.js', __FILE__), array('jquery'));
-	wp_enqueue_style('hm_bbpui', plugins_url('css/bbp-image-upload.css', __FILE__));
+	if (is_bbpress()) {
+		wp_enqueue_script('hm_bbpui', plugins_url('js/bbp-image-upload.js', __FILE__), array('jquery'));
+		wp_enqueue_style('hm_bbpui', plugins_url('css/bbp-image-upload.css', __FILE__));
+	}
 }
 
 add_action('wp_insert_post', 'hm_bbpui_insert_post');

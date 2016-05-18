@@ -1,10 +1,10 @@
-=== Image Upload for BBPress ===
+=== Inline Image Upload for BBPress ===
 Contributors: hearken
 Donate link: https://potentplugins.com/donate/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-readme-donate-link
-Tags: bbpress, image, images, media
+Tags: bbpress, image, images, inline, media
 Requires at least: 3.5
 Tested up to: 4.5
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,7 @@ A [pro version](http://potentplugins.com/downloads/image-upload-for-bbpress-pro-
 * Automatically downsize images to fit specified maximum dimensions.
 * Convert all uploaded images to the same image format, if desired.
 * Set PNG and JPEG compression levels so images take up less disk space.
+* Allow users to view enlarged images in a lightbox by clicking on them within the post.
 * View total image count and file size statistics.
 
 == Installation ==
