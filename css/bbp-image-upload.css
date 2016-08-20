@@ -7,3 +7,8 @@ body.bbpress .mce-panel[aria-label="Insert/edit image"] .mce-form > .mce-contain
 body.buddypress.forum .mce-panel[aria-label="Insert/edit image"] .mce-form > .mce-container-body > .mce-last {
 	display: none;
 }
+#hm_bbpui_file_frame {
+	width: 1px;
+	height: 1px;
+	border: 0;
+}
