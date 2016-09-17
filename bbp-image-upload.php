@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Image Upload for BBPress
  * Description: Upload inline images to BBPress forum topics and replies.
- * Version: 1.1.7
+ * Version: 1.1.8
  * Author: Potent Plugins
  * Author URI: http://potentplugins.com/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-author-uri
  * License: GNU General Public License version 2 or later
@@ -211,7 +211,7 @@ function hm_bbpui_insert_post($postId) {
 		foreach($matches[1] as $match) {
 			if (strpos($match, '/') || strpos($match, '\\'))
 				continue;
-			rename($uploadDir['basedir'].'/hm_bbpui_temp/'.$match, $uploadDir['basedir'].'/hm_bbpui/'.$post->ID.'/'.$match);
+			@rename($uploadDir['basedir'].'/hm_bbpui_temp/'.$match, $uploadDir['basedir'].'/hm_bbpui/'.$post->ID.'/'.$match);
 			$post->post_content = str_replace('/hm_bbpui_temp/'.$match, '/hm_bbpui/'.$post->ID.'/'.$match, $post->post_content);
 		}
 		
@@ -233,6 +233,7 @@ function hm_bbpui_delete_post($postId) {
 	}
 }
 
+add_action('hm_bbpui_clean_temp_dir', 'hm_bbpui_clean_temp_dir');
 function hm_bbpui_clean_temp_dir() {
 	$uploadDir = wp_upload_dir();
 	$timeThreshold = time() - 86400;
