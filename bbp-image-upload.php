@@ -44,7 +44,7 @@ function hm_bbpui_admin_page() {
 <li>View total image count and file size statistics.</li>
 <li>Allow users to upload animated GIFs while preserving animation.</li>
 		</ul>
-		<strong>Receive a 10% discount with the coupon code <span style="color: #f00;">BBPIMAGES10</span>!</strong>
+		<strong>Receive a 10% discount with the coupon code <span style="color: #f00;">BBPIMAGES10</span>! (Not valid with any other offer.)</strong>
 		<a href="http://potentplugins.com/downloads/image-upload-for-bbpress-pro-wordpress-plugin/?utm_source=image-upload-for-bbpress&amp;utm_medium=link&amp;utm_campaign=wp-plugin-upgrade-link" target="_blank">Buy Now &gt;</a>
 	</div>');
 	echo('
