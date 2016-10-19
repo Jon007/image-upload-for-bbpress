@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Image Upload for BBPress
  * Description: Upload inline images to BBPress forum topics and replies.
- * Version: 1.1.8
+ * Version: 1.1.9
  * Author: Potent Plugins
  * Author URI: http://potentplugins.com/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-author-uri
  * License: GNU General Public License version 2 or later
@@ -30,9 +30,10 @@ function hm_bbpui_admin_page() {
 			<h2>Image Upload for BBPress</h2>
 			
 	');
-	echo('<div style="background-color: #fff; border: 1px solid #ccc; padding: 20px; max-width: 800px;">
-		<h3 style="margin: 0;">Upgrade to <a href="http://potentplugins.com/downloads/image-upload-for-bbpress-pro-wordpress-plugin/?utm_source=image-upload-for-bbpress&amp;utm_medium=link&amp;utm_campaign=wp-plugin-upgrade-link" target="_blank">Image Upload for BBPress Pro</a> for advanced configuration options!</h3>
+	echo('<div style="background-color: #fff; border: 1px solid #ccc; padding: 20px; max-width: 800px; margin-top: 10px;">
+		<h3 style="margin: 0;">Upgrade to <a href="http://potentplugins.com/downloads/image-upload-for-bbpress-pro-wordpress-plugin/?utm_source=image-upload-for-bbpress&amp;utm_medium=link&amp;utm_campaign=wp-plugin-upgrade-link" target="_blank">Image Upload for BBPress Pro</a> for more features and options!</h3>
 		<ul>
+<li style="color: #f00; font-weight: bold;">Upload multiple images at once with the responsive drag-and-drop uploader!</li>
 <li>Change the directory where uploaded images are stored.</li>
 <li>Limit which user roles are permitted to upload images.</li>
 <li>Limit the number of uploaded images allowed per post.</li>
@@ -41,8 +42,9 @@ function hm_bbpui_admin_page() {
 <li>Set PNG and JPEG compression levels so images take up less disk space.</li>
 <li>Allow users to view enlarged images in a <strong>lightbox</strong> by clicking on them within the post.</li>
 <li>View total image count and file size statistics.</li>
+<li>Allow users to upload animated GIFs while preserving animation.</li>
 		</ul>
-		<strong>Receive a 25% discount with the coupon code <span style="color: #f00;">BBPIMAGES25</span>!</strong>
+		<strong>Receive a 10% discount with the coupon code <span style="color: #f00;">BBPIMAGES10</span>!</strong>
 		<a href="http://potentplugins.com/downloads/image-upload-for-bbpress-pro-wordpress-plugin/?utm_source=image-upload-for-bbpress&amp;utm_medium=link&amp;utm_campaign=wp-plugin-upgrade-link" target="_blank">Buy Now &gt;</a>
 	</div>');
 	echo('
@@ -208,7 +210,7 @@ function hm_bbpui_insert_post($postId) {
 		if (!is_dir($uploadDir['basedir'].'/hm_bbpui/'.$post->ID))
 			mkdir($uploadDir['basedir'].'/hm_bbpui/'.$post->ID);
 	
-		foreach($matches[1] as $match) {
+		foreach(array_unique($matches[1]) as $match) {
 			if (strpos($match, '/') || strpos($match, '\\'))
 				continue;
 			@rename($uploadDir['basedir'].'/hm_bbpui_temp/'.$match, $uploadDir['basedir'].'/hm_bbpui/'.$post->ID.'/'.$match);
