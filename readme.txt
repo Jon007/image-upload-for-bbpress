@@ -3,7 +3,7 @@ Contributors: hearken
 Donate link: https://potentplugins.com/donate/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-readme-donate-link
 Tags: bbpress, image, images, inline, media
 Requires at least: 3.5
-Tested up to: 4.6.1
+Tested up to: 4.7
 Stable tag: 1.1.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
