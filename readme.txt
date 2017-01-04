@@ -4,7 +4,7 @@ Donate link: https://potentplugins.com/donate/?utm_source=image-upload-for-bbpre
 Tags: bbpress, image, images, inline, media
 Requires at least: 3.5
 Tested up to: 4.7
-Stable tag: 1.1.10
+Stable tag: 1.1.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ A [pro version](http://potentplugins.com/downloads/image-upload-for-bbpress-pro-
 * Set PNG and JPEG compression levels so images take up less disk space.
 * Allow users to view enlarged images in a lightbox by clicking on them within the post.
 * View total image count and file size statistics.
+* Use [Amazon S3™](https://aws.amazon.com/s3/) to store and serve uploaded images in submitted forum posts (optional; requires [add-on plugin](https://potentplugins.com/downloads/s3-image-storage-bbpress/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-repo-upgrade-link) purchase).
+
+Amazon Web Services, the "Powered by Amazon Web Services" logo, AWS, Amazon Simple Storage Service, and Amazon S3 are trademarks of Amazon.com, Inc. or its affiliates in the United States and/or other countries. Potent Plugins is not affiliated with Amazon.com, Inc. or Amazon Web Services.
 
 == Installation ==
 
@@ -42,6 +45,9 @@ Alternatively, you can manually upload the plugin to your wp-content/plugins dir
 2. The Browse button in the Image dialog, which allows the user to select and upload an image from their computer for inline insertion into their forum topic or reply.
 
 == Changelog ==
+
+= 1.1.11 =
+* Fixed unnecessary creation of revision when saving forum post
 
 = 1.1.10 =
 * Improved compatibility with other plugins and themes that activate the visual editor in bbPress

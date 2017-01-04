@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Image Upload for BBPress
  * Description: Upload inline images to BBPress forum topics and replies.
- * Version: 1.1.10
+ * Version: 1.1.11
  * Author: Potent Plugins
  * Author URI: http://potentplugins.com/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-author-uri
  * License: GNU General Public License version 2 or later
@@ -34,6 +34,7 @@ function hm_bbpui_admin_page() {
 		<h3 style="margin: 0;">Upgrade to <a href="http://potentplugins.com/downloads/image-upload-for-bbpress-pro-wordpress-plugin/?utm_source=image-upload-for-bbpress&amp;utm_medium=link&amp;utm_campaign=wp-plugin-upgrade-link" target="_blank">Image Upload for BBPress Pro</a> for more features and options!</h3>
 		<ul>
 <li style="color: #f00; font-weight: bold;">Upload multiple images at once with the responsive drag-and-drop uploader!</li>
+<li><span style="color: #f00; font-weight: bold;">Use S3 for image storage!</span> (Optional; requires add-on plugin purchase.)</li>
 <li>Change the directory where uploaded images are stored.</li>
 <li>Limit which user roles are permitted to upload images.</li>
 <li>Limit the number of uploaded images allowed per post.</li>
@@ -218,7 +219,13 @@ function hm_bbpui_insert_post($postId) {
 		}
 		
 		remove_action('wp_insert_post', 'hm_bbpui_insert_post');
+		
+		// Temporarily disable revisioning
+		if (($saveRevisionPriority = has_action('post_updated', 'wp_save_post_revision'))) {
+			remove_action('post_updated', 'wp_save_post_revision', $saveRevisionPriority);
+		}
 		wp_update_post($post);
+		add_action('post_updated', 'wp_save_post_revision', $saveRevisionPriority);
 	}
 }
 
