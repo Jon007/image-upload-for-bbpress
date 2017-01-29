@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Image Upload for BBPress
  * Description: Upload inline images to BBPress forum topics and replies.
- * Version: 1.1.11
+ * Version: 1.1.12
  * Author: Potent Plugins
  * Author URI: http://potentplugins.com/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-author-uri
  * License: GNU General Public License version 2 or later
@@ -224,7 +224,19 @@ function hm_bbpui_insert_post($postId) {
 		if (($saveRevisionPriority = has_action('post_updated', 'wp_save_post_revision'))) {
 			remove_action('post_updated', 'wp_save_post_revision', $saveRevisionPriority);
 		}
+		// Temporarily remove edit_post actions (deals with BuddyPress activity feed problem)
+		global $wp_filter;
+		if (isset($wp_filter['edit_post'])) {
+			$edit_post_temp = $wp_filter['edit_post'];
+			unset($wp_filter['edit_post']);
+		}
 		wp_update_post($post);
+		
+		// Restore edit_post actions
+		if (isset($edit_post_temp)) {
+			$wp_filter['edit_post'] = $edit_post_temp;
+		}
+		
 		add_action('post_updated', 'wp_save_post_revision', $saveRevisionPriority);
 	}
 }
