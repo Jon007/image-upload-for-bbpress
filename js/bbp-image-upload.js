@@ -14,7 +14,7 @@ function hm_bbpui_file_upload(field_id) {
 
 function hm_bbpui_file_upload_submit() {
 	jQuery('#hm_bbpui_file_frame').load(function() {
-		var response = jQuery('#hm_bbpui_file_frame').contents().find('body').html();
+		var response = jQuery('#hm_bbpui_file_frame').contents().find('body').text();
 		if (response == '' || response == 'Error') {
 			alert('The image could not be uploaded. Please check that it is a valid JPEG, PNG, or GIF file and that the file size is not too large.');
 			response = '';
