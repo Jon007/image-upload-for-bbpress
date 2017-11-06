@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Image Upload for BBPress
  * Description: Upload inline images to BBPress forum topics and replies.
- * Version: 1.1.14
+ * Version: 1.1.15
  * Author: Potent Plugins
  * Author URI: http://potentplugins.com/?utm_source=image-upload-for-bbpress&utm_medium=link&utm_campaign=wp-plugin-author-uri
  * License: GNU General Public License version 2 or later
@@ -158,6 +158,27 @@ function hm_bbpui_handle_upload() {
 	}
 	
 	@unlink($_FILES['hm_bbpui_file']['tmp_name']);
+
+    /**
+     * Filters the data array for the uploaded file.
+     *
+     * @since 2.1.0
+     *
+     * @param array  $upload {
+     *     Array of upload data.
+     *
+     *     @type string $file Filename of the newly-uploaded file.
+     *     @type string $url  URL of the uploaded file.
+     *     @type string $type File type.
+     * }
+     * @param string $context The type of upload action. Values include 'upload' or 'sideload'.
+     */
+    apply_filters( 'wp_handle_upload', array(
+        'file' => $tempUploadDir.'/'.$tempName,
+        'url'  => $uploadDir['baseurl'].'/hm_bbpui_temp/'.$tempName,
+        'type' => strtolower($_FILES['hm_bbpui_file']['type'])
+    ), 'wp_handle_sideload' === 'upload' );
+    
 	echo($uploadDir['baseurl'].'/hm_bbpui_temp/'.$tempName);
 	exit;
 	
